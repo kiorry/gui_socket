@@ -2,15 +2,16 @@
 #创建表
 import sqlite3
 
-conn = sqlite3.connect('test.db')
-print("Opened database successfully")
-c = conn.cursor()
-c.execute('''CREATE TABLE COMPANY
-       (ID INT PRIMARY KEY     NOT NULL,
-       NAME           TEXT    NOT NULL,
-       AGE            INT     NOT NULL,
-       ADDRESS        CHAR(50),
-       SALARY         REAL);''')
-print("Table created successfully")
-conn.commit()
-conn.close()
+def searchDB(db_name = "user.db",tb_name = "user"):
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+
+    query = "select name,password from %s;"%tb_name
+    name,password = cursor.execute(query).fetchone()
+    conn.close()
+    return name,password
+
+# searchDB(db_name = "user.db",tb_name = "user")
+if __name__ == "__main__":
+    name, password = searchDB(db_name = "user.db",tb_name = "user")
+    print(name,password)

@@ -5,6 +5,8 @@
 # Created by: PyQt5 UI code generator 5.9
 #
 # WARNING! All changes made in this file will be lost!
+import userDB
+name, password = userDB.searchDB()
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -63,18 +65,28 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "用户登陆"))
         self.label_account.setText(_translate("Form", "帐号"))
         self.label_password.setText(_translate("Form", "密码"))
         self.pushButton_submit.setText(_translate("Form", "登陆"))
 
     def login(self):
-        account = self.lineEdit_account.text()
-        passoword = self.lineEdit_password.text()
-        print("帐号:%s"%account)
-        print("密码:%s"%passoword)
+        input_account = self.lineEdit_account.text()
+        input_password = self.lineEdit_password.text()
+        # print("帐号:%s"%account)
+        # print("密码:%s"%passoword)
+        if input_account == name and input_password == password:
+            print("well doen!")
+        else:
+            print("请输入正确的用户名及密码!")
+            self.lineEdit_account.clear()
+            self.lineEdit_password.clear()
+
+
 if __name__ == "__main__":
     import sys
+
+
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
     ui = Ui_Form()
