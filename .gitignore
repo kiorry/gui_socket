@@ -1,5 +1,7 @@
 _eric6project
 __pycache__
+dist
+build
 .git
-soc.e4p
+.e4p
 .idea
