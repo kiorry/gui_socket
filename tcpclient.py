@@ -1,29 +1,17 @@
 import socket
 
-host = "127.0.0.1"
-port = 12345
+class VoidClient():
+    HOST = ''
+    PORT =27001
+    def __init__(self):
+        self.ClientSock = socket.socket()
+        # self.RunListen()
+    def SendData(self,data):
+        self.ClientSock.send(data.encode())
+        data = self.ClientSock.recv(1024)
+        print(data.decode())
+    def ShutServer(self):
+        self.ClientSock.close()
 
-s = socket.socket()
-
-s.connect((host,port))
-
-cli_data = "你好!"
-
-s.sendall(cli_data.encode())
-
-
-
-while 1:
-    ser_data = s.recv(1024)
-    print("从服务器收到的信息是:",ser_data.decode())
-
-    data = input(">>>")
-    if not data:
-        break
-    if data == "exit":
-        s.close()
-    else:
-        s.sendall(data.encode())
-
-    
-s.close()
+client = VoidClient()
+client.SendData("abc")
