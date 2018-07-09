@@ -1,37 +1,26 @@
-import socket
-HOST = ''
-PORT =27001
-# s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-# s = socket.socket()
-# s.bind((HOST,PORT))
-# s.listen(2)
-# conn,addr = s.accept()
-# print('Connect by ',addr)
-# while 1:
-#     data = conn.recv(1024)
-#     print(data)
-#     if not data :break
-#     conn.send(data)
-# conn.close()
-
+import socket,os,struct
 class VoidServer():
-    HOST = ''
-    PORT =27001
     def __init__(self):
-        self.ServerSock = socket.socket()
-        # self.RunListen()
+        self.HOST = '127.0.0.1'
+        self.PORT = 3214
+        self.ServerSock = socket.socket()        
+        self.ServerSock.bind((self.HOST,self.PORT))
+        self.ServerSock.listen(5)
     def RunListen(self):
-        self.ServerSock.bind((VoidServer.HOST,VoidServer.PORT))
-        self.ServerSock.listen(2)
-        conn,addr = self.ServerSock.accept()
+        client,addr = self.ServerSock.accept()
         while True: 
-            data = conn.recv(1024)
-            print(data)
-            if not data :break
-            conn.send(data)
-        conn.close()
-    def ShutServer(self):
+            data = client.recv(1024)
+            print(data.decode())
+            client.send(data)
+            if not data :                
+                print("Not Data!",data.decode())
+                client.close()
+                break
+        client.close()
+    def ShutdownServer(self):
         self.ServerSock.close()
         
 server = VoidServer()
-server.RunListen()
+while True:
+    print("server now stand by!")
+    server.RunListen()
