@@ -6,21 +6,33 @@ class VoidServer():
         self.ServerSock = socket.socket()        
         self.ServerSock.bind((self.HOST,self.PORT))
         self.ServerSock.listen(5)
+        self.RunListen()
     def RunListen(self):
         client,addr = self.ServerSock.accept()
-        while True: 
-            data = client.recv(1024)
-            print(data.decode())
-            client.send(data)
-            if not data :                
-                print("Not Data!",data.decode())
-                client.close()
+        recv_file = open(r"./FileRecv/abc.exe","wb")
+        while client:
+            try:
+                data = client.recv(1024*10000)
+                if not data :                
+                    print("Not Data!")                    
+                    break
+                else:
+                    print(data)
+                    recv_file.write(data)
+                    # client.sendall(data)            
+            except Exception as e:
+                print(e)
                 break
+        recv_file.close()
         client.close()
-    def ShutdownServer(self):
         self.ServerSock.close()
-        
-server = VoidServer()
+
 while True:
-    print("server now stand by!")
-    server.RunListen()
+    try:
+        print("server now stand by!")
+        server = VoidServer()
+    except Exception as e:
+        print(e)
+        server.ServerSock.close()
+
+# os.system("pause")
