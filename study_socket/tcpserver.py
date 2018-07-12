@@ -12,7 +12,7 @@ class VoidServer():
         recv_file = open(r"./FileRecv/abc.exe","wb")
         while client:
             try:
-                data = client.recv(1024*10000)
+                data = client.recv(1024)
                 if not data :                
                     print("Not Data!")                    
                     break
