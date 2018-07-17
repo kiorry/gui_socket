@@ -2,6 +2,9 @@ _eric6project
 __pycache__
 dist
 build
+study_pyqt
+study_socket
+study_sqlite
 .git
 .e4p
 .idea
