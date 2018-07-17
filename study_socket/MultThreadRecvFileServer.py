@@ -1,52 +1,30 @@
-#-*- coding: UTF-8 -*-
+# __auth__ =  "嘻嘻TV²º¹⁷"
 
-import socket,time,struct,os,threading
-from threading import Thread
-import hashlib
+import socket,time,traceback
+import threading
 
-HOST = '127.0.0.1'
-PORT = 3214
+def data_processor(client,address):
+    try:
+        print(address)
+        client.settimeout(500)
+        rec_data = client.recv(20400000000)
 
-s=socket.socket(socket.AF_INET,socket.SOCK_STREAM) 
-s.bind((HOST,PORT)) #绑定需要监听的Ip和端口号，tuple格式
-s.listen(1)
+        with open("FileRecv/{}.txt".format(int(time.time())),"wb") as f:
+            f.write(rec_data)
 
-def conn_thread(connection,address):  
+    except socket.timeout:
+        traceback.print_exc()
+        print( 'time out')
+
+def main():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.bind(('127.0.0.1', 3214))
+    sock.listen(1)
     while True:
-        try:
-            connection.settimeout(600)
-            fileinfo_size=struct.calcsize('64sL64s')
-            buf = connection.recv(fileinfo_size)
-            print(buf)
-            # if buf: #如果不加这个if，第一个文件传输完成后会自动走到下一句
-            #     filename,filesize =struct.unpack('128sl',buf) 
-            #     filename_f = filename.strip('\00')
-            #     filenewname = os.path.join(r'FileRecv',('new_'+ filename_f))
-            #     print ('file new name is %s, filesize is %s' %(filenewname,filesize))
-            #     recvd_size = 0 #定义接收了的文件大小
-            #     file = open(filenewname,'wb')
-            #     # print 'stat receiving...'2
-            #     while not recvd_size == filesize:
-            #         if filesize - recvd_size > 1024:
-            #             rdata = connection.recv(1024)
-            #             recvd_size += len(rdata)
-            #         else:
-            #             rdata = connection.recv(filesize - recvd_size) 
-            #             recvd_size = filesize
-            #         file.write(rdata)
-            #     file.close()
-                # print 'receive done'
-                #connection.close()
-        except socket.timeout:
-            connection.close()
+        print("go.................")
+        client,address = sock.accept()
+        thread = threading.Thread(target=data_processor, args=(client,address))
+        thread.start()
 
-
-# while True:
-#     connection,address=s.accept()
-#     print('Connected by ',address)
-#     thread = threading.Thread(target=conn_thread,args=(connection,address)) #使用threading也可以
-#     thread.start()
-
-connection,address=s.accept()    
-conn_thread(connection,address)
-s.close()
+if __name__ == '__main__':
+    main()
